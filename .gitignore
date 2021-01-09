@@ -1,0 +1,4 @@
+.idea/
+*.sqlite*
+**/migrations/**
+**/__pycache__/**

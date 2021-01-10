@@ -1,21 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Cornershop's meal management system</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<h2>Cornershop meal management</h2>
+{% block title %}Cornershop's meal management system{% endblock %}
 
-{% if not user.is_authenticated %}
-    <a href="{% url 'login' %}">Login</a>
-    <a href="{% url 'signup_manager' %}">Signup as manager</a>
-    <a href="{% url 'signup_employee' %}">Signup as employee</a>
-{% else %}
-    <a href="{% url 'profile' %}">Profile</a>
-{% endif %}
-
-
-</body>
-</html>
+{% block content %}
+    <h2>Cornershop meal management</h2>
+{% endblock %}

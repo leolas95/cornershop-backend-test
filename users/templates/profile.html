@@ -10,4 +10,5 @@
     {% if user.is_authenticated %}
         <h2>Hi {{ user.first_name }} {{ user.last_name }}</h2>
     {% endif %}
+    <a href="{% url 'index' %}">Back to home</a>
 {% endblock %}

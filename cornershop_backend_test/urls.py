@@ -17,12 +17,13 @@ Including another URLconf
 from django.urls import path
 from django.views.generic import TemplateView
 
-from users.views import SignUpManagerView, ProfileView, SignUpEmployeeView, LoginEmployeeView
+from users.views import SignUpManagerView, SignUpEmployeeView, LoginEmployeeView, ProfileView
 
 urlpatterns = [
     #    path('admin/', admin.site.urls),
+    path('', TemplateView.as_view(template_name='index.html'), name='index'),
     path('users/login/', LoginEmployeeView.as_view(), name='login'),
     path('users/manager/signup/', SignUpManagerView.as_view(), name='signup_manager'),
     path('users/employee/signup/', SignUpEmployeeView.as_view(), name='signup_employee'),
-    path('users/profile/<int:employee_id>', ProfileView.as_view(), name='profile'),
+    path('users/profile/', ProfileView.as_view(), name='profile'),
 ]

@@ -119,3 +119,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'users.employee'
+LOGIN_REDIRECT_URL = 'profile'

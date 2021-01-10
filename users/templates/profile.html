@@ -10,5 +10,6 @@
     {% if user.is_authenticated %}
         <h2>Hi {{ user.first_name }} {{ user.last_name }}</h2>
     {% endif %}
-    <a href="{% url 'index' %}">Back to home</a>
+    <p><a href="{% url 'list_menus' %}">See menus</a></p>
+    <p><a href="{% url 'index' %}">Back to home</a></p>
 {% endblock %}

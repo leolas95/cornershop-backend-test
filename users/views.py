@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect
 # Create your views here.
@@ -52,7 +53,9 @@ class SignUpEmployeeView(View):
         return render(request, 'signup.html', context)
 
 
-class ProfileView(View):
+class ProfileView(LoginRequiredMixin, View):
+    login_url = 'login'
+
     def get(self, request):
         return render(request, 'profile.html')
 

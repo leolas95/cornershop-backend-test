@@ -13,7 +13,7 @@ from menus.models import Menu
 class CreateMenuView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     login_url = 'login'
     form_class = CreateMenuForm
-    template_name = 'create_menu.html'
+    template_name = 'create.html'
 
     def test_func(self):
         return self.request.user.is_staff

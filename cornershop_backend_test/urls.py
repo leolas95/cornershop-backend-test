@@ -18,7 +18,7 @@ from django.contrib.auth.views import LogoutView
 from django.urls import path
 from django.views.generic import TemplateView
 
-from menus.views import CreateMenuView
+from menus.views import CreateMenuView, DetailMenuView
 from users.views import SignUpManagerView, SignUpEmployeeView, LoginEmployeeView, ProfileView
 
 urlpatterns = [
@@ -29,5 +29,6 @@ urlpatterns = [
     path('users/manager/signup/', SignUpManagerView.as_view(), name='signup_manager'),
     path('users/employee/signup/', SignUpEmployeeView.as_view(), name='signup_employee'),
     path('users/profile/', ProfileView.as_view(), name='profile'),
-    path('menus/create/', CreateMenuView.as_view(), name='create_menu'),
+    path('menu/create/', CreateMenuView.as_view(), name='create_menu'),
+    path('menu/<int:pk>/', DetailMenuView.as_view(), name='detail_menu'),
 ]

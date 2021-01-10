@@ -21,8 +21,29 @@ class SignUpManagerView(View):
         form = CreateEmployeeForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_superuser = True
+            user.is_staff = True
             user.save()
+
+            auth_user = authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password1']
+            )
+            login(request, auth_user)
+            return redirect(reverse('profile', kwargs={'employee_id': user.pk}))
+        context = {'form': form}
+        return render(request, 'signup.html', context)
+
+
+class SignUpEmployeeView(View):
+    def get(self, request):
+        form = CreateEmployeeForm()
+        context = {'form': form}
+        return render(request, 'signup.html', context)
+
+    def post(self, request):
+        form = CreateEmployeeForm(request.POST)
+        if form.is_valid():
+            user = form.save()
 
             auth_user = authenticate(
                 username=form.cleaned_data['username'],

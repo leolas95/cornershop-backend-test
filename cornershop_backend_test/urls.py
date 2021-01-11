@@ -32,4 +32,5 @@ urlpatterns = [
     path('menu/create/', CreateMenuView.as_view(), name='create_menu'),
     path('menu/<int:pk>/', DetailMenuView.as_view(), name='detail_menu'),
     path('menu/', ListMenuView.as_view(), name='list_menus'),
+    # path('menu/send_reminder/', name='send_reminder'),
 ]

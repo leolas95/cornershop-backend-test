@@ -1,7 +1,11 @@
 import requests
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import redirect
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
 from django.views import View
+
+from menus.models import Menu
+from slack.forms import MenuForm
 
 
 def get_users():
@@ -41,4 +45,15 @@ class SendReminderView(LoginRequiredMixin, UserPassesTestMixin, View):
         send_reminder(users)
         return redirect('list_menus')
 
+
+class SelectMenuOptionView(View):
+    def get(self, request, menu_id):
+        menu = Menu.objects.filter(id=menu_id)
+        if not menu.exists():
+            ...
+        menu = menu.first()
+        return render(request, 'select_option.html', {'menu': menu})
+
+    def post(self, request, menu_id):
+        return HttpResponse('Ok')
 

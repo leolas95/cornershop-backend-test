@@ -1,9 +1,13 @@
 from django import forms
 
-from menus.models import Menu
 
+class CreateMenuForm(forms.Form):
+    date = forms.DateField()
 
-class CreateMenuForm(forms.ModelForm):
-    class Meta:
-        model = Menu
-        fields = ('date', 'option1', 'option2', 'option3', 'option4')
+    def __init__(self, *args, **kwargs):
+        options = kwargs.pop('options', [])
+        super(CreateMenuForm, self).__init__(*args, **kwargs)
+
+        for i, option in enumerate(options, 1):
+            key = f'option{i}'
+            self.fields[key] = forms.CharField(max_length=100, label=option[key])

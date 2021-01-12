@@ -5,21 +5,7 @@
 {% block content %}
     {{ menu.date }}'s menu
 
-    <p>Option 1: {{ menu.option1 }}</p>
-    {% if menu.option2 %}
-        <p>Option 2: {{ menu.option2 }}</p>
-    {% endif %}
-
-    {% if menu.option3 %}
-        <p>Option 3: {{ menu.option3 }}</p>
-    {% endif %}
-
-    {% if menu.option4 %}
-        <p>Option 4: {{ menu.option4 }}</p>
-    {% endif %}
-
-    <form action="{% url 'send_reminder' menu.id %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Send reminder to all employees</button>
-    </form>
+    {% for option in menu.options.all %}
+        <p>Option {{ forloop.counter }}: {{ option }}</p>
+    {% endfor %}
 {% endblock %}

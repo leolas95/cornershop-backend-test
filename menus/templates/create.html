@@ -9,6 +9,42 @@ Create menu
     <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}
+        <button id="add-option-btn" type="button">Add option</button>
+        <div id="options-container"></div>
         <button type="submit">Create menu</button>
     </form>
+{% endblock %}
+
+{% block scripts %}
+    <script type="application/javascript">
+        const addOptionBtn = document.querySelector('#add-option-btn');
+        const container = document.querySelector('#options-container');
+
+        let counter = 1;
+
+        function addOptionInput() {
+            // Creates a new input for the option, including a label
+            const inputId = `option${counter}`;
+            const paragraph = document.createElement('p');
+
+            const label = document.createElement('label');
+            label.htmlFor = inputId;
+            label.innerText = `Option ${counter}:`;
+
+            const input = document.createElement('input')
+            input.type = 'text';
+            input.id = inputId;
+            input.name = inputId;
+
+            paragraph.appendChild(label)
+            paragraph.appendChild(input)
+            container.appendChild(paragraph);
+        }
+
+        addOptionBtn.addEventListener('click', () => {
+            addOptionInput();
+            counter++;
+        });
+    </script>
+
 {% endblock %}

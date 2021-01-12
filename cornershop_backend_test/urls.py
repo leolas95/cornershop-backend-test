@@ -19,6 +19,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from menus.views import CreateMenuView, DetailMenuView, ListMenuView
+from slack.views import SendReminderView
 from users.views import SignUpManagerView, SignUpEmployeeView, LoginEmployeeView, ProfileView
 
 urlpatterns = [
@@ -32,5 +33,5 @@ urlpatterns = [
     path('menu/create/', CreateMenuView.as_view(), name='create_menu'),
     path('menu/<int:pk>/', DetailMenuView.as_view(), name='detail_menu'),
     path('menu/', ListMenuView.as_view(), name='list_menus'),
-    # path('menu/send_reminder/', name='send_reminder'),
+    path('menu/send_reminder/<int:menu_id>', SendReminderView.as_view(), name='send_reminder'),
 ]

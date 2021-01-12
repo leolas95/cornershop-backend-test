@@ -17,4 +17,9 @@
     {% if menu.option4 %}
         <p>Option 4: {{ menu.option4 }}</p>
     {% endif %}
+
+    <form action="{% url 'send_reminder' menu.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Send reminder to all employees</button>
+    </form>
 {% endblock %}

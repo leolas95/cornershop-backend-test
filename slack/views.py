@@ -1,4 +1,7 @@
 import requests
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import redirect
+from django.views import View
 
 
 def get_users():
@@ -25,4 +28,17 @@ def send_reminder(users):
             headers={'Authorization': 'Bearer xoxp-1622044669637-1637762199217-1649177671232-3fa7fe1f4792d04468b6472ee4f76599'},
             json={'text': 'Hello world!', 'time': 'in 5 seconds', 'user': user_id}
         )
+
+
+class SendReminderView(LoginRequiredMixin, UserPassesTestMixin, View):
+    login_url = 'login'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def post(self, request, menu_id):
+        users = get_users()
+        send_reminder(users)
+        return redirect('list_menus')
+
 

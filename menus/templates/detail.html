@@ -5,7 +5,12 @@
 {% block content %}
     {{ menu.date }}'s menu
 
-    {% for option in menu.options.all %}
-        <p>Option {{ forloop.counter }}: {{ option }}</p>
-    {% endfor %}
+    <form action="{% url 'send_reminder' menu.id %}" method="post">
+        {% csrf_token %}
+        {% for option in menu.options.all %}
+            <p>Option {{ forloop.counter }}: {{ option }}</p>
+        {% endfor %}
+
+        <button type="submit">Send reminder to all employees</button>
+    </form>
 {% endblock %}

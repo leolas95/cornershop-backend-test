@@ -34,5 +34,5 @@ urlpatterns = [
     path('menu/detail/<int:pk>/', DetailMenuView.as_view(), name='detail_menu'),
     path('menu/', ListMenuView.as_view(), name='list_menus'),
     path('menu/send_reminder/<int:menu_id>', SendReminderView.as_view(), name='send_reminder'),
-    path('menu/<int:menu_id>/', SelectMenuOptionView.as_view(), name='select_menu_option'),
+    path('menu/<uuid:selection_uuid>/', SelectMenuOptionView.as_view(), name='select_menu_option'),
 ]

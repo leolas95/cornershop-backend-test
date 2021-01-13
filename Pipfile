@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 django = "3.1.5"
 requests = "*"
+celery = "==5.0"
 
 [dev-packages]
 

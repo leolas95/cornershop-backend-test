@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.urls import reverse
 
 from users.models import Employee
 
@@ -27,3 +28,6 @@ class MenuSelection(models.Model):
     slack_user_id = models.CharField(max_length=20)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
     option = models.OneToOneField(Option, on_delete=models.CASCADE, related_name='selection', null=True)
+
+    def get_absolute_url(self):
+        return reverse('select_menu_option', kwargs={'selection_uuid': self.id})

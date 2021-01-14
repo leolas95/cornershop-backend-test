@@ -12,12 +12,13 @@ LIMIT_HOUR = timezone.now().time().replace(hour=11, minute=0, second=0, microsec
 
 
 class SendReminderView(LoginRequiredMixin, UserPassesTestMixin, View):
-    login_url = 'login'
+    login_url = 'users:login'
 
     def test_func(self):
         return self.request.user.is_staff
 
-    def post(self, request, menu_id):
+    @staticmethod
+    def post(request, menu_id):
         scheme = request.scheme
         host = request.get_host()
         send_reminders(menu_id, scheme, host)
@@ -25,15 +26,17 @@ class SendReminderView(LoginRequiredMixin, UserPassesTestMixin, View):
 
 
 class SelectMenuOptionView(View):
-    def get(self, request, selection_uuid):
+    @staticmethod
+    def get(request, selection_uuid):
         selection = get_object_or_404(MenuSelection, id=selection_uuid)
         form = MenuForm(instance=selection.menu)
         return render(request, 'select_option.html', {'form': form})
 
-    def post(self, request, selection_uuid):
+    @staticmethod
+    def post(request, selection_uuid):
         if timezone.now().time() > LIMIT_HOUR:
             return HttpResponse(
-                f'Time\'s up! Limit time to pick an option is {LIMIT_HOUR} CLT! Better luck next day'
+                f"Sorry but time's up! Limit time to pick an option is {LIMIT_HOUR} CLT!"
             )
 
         selection = get_object_or_404(MenuSelection, id=selection_uuid)
@@ -42,7 +45,7 @@ class SelectMenuOptionView(View):
         if form.is_valid():
             selection.option = form.cleaned_data['options']
             selection.save()
-            return HttpResponse('Ok, thanks! Have a good meal :)')
+            return HttpResponse('Got it, thanks! Have a good meal :)')
 
         form = MenuForm(instance=selection.menu)
         return render(request, 'select_option.html', {'form': form})

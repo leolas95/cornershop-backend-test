@@ -1,6 +1,6 @@
 from django import forms
 
-from menus.models import Menu, Option, MenuSelection
+from menus.models import Menu, Option
 
 
 class CreateMenuForm(forms.Form):

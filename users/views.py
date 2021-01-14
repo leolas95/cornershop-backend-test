@@ -1,8 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
-# Create your views here.
 from django.urls import reverse
 from django.views import View
 
@@ -27,7 +26,7 @@ class SignUpManagerView(View):
                 password=form.cleaned_data['password1']
             )
             login(request, auth_user)
-            return redirect(reverse('profile'))
+            return redirect(reverse('users:profile'))
         context = {'form': form}
         return render(request, 'signup.html', context)
 
@@ -48,15 +47,16 @@ class SignUpEmployeeView(View):
                 password=form.cleaned_data['password1']
             )
             login(request, auth_user)
-            return redirect(reverse('profile'))
+            return redirect(reverse('users:profile'))
         context = {'form': form}
         return render(request, 'signup.html', context)
 
 
 class ProfileView(LoginRequiredMixin, View):
-    login_url = 'login'
+    login_url = 'users:login'
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         return render(request, 'profile.html')
 
 

@@ -11,6 +11,8 @@ class Menu(models.Model):
 
 
 class Option(models.Model):
+    """Model to store an option, and the menu it's related to."""
+
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='options')
     option = models.CharField(max_length=100)
 
@@ -24,6 +26,8 @@ class Option(models.Model):
 
 
 class MenuSelection(models.Model):
+    """Model to save the menu selection of a member of the slack workspace."""
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     slack_user_id = models.CharField(max_length=20)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE)

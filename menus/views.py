@@ -9,7 +9,7 @@ from menus.models import Menu, Option
 
 
 class CreateMenuView(LoginRequiredMixin, UserPassesTestMixin, View):
-    login_url = 'login'
+    login_url = 'users:login'
     form_class = CreateMenuForm
     template_name = 'create.html'
 
@@ -49,7 +49,7 @@ class CreateMenuView(LoginRequiredMixin, UserPassesTestMixin, View):
 
 class DetailMenuView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Menu
-    login_url = 'login'
+    login_url = 'users:login'
     context_object_name = 'menu'
     template_name = 'detail.html'
 
@@ -59,7 +59,7 @@ class DetailMenuView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
 class ListMenuView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Menu
-    login_url = 'login'
+    login_url = 'users:login'
     context_object_name = 'menus'
     template_name = 'list.html'
 

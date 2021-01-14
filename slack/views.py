@@ -6,7 +6,7 @@ from django.views import View
 
 from menus.forms import MenuForm
 from menus.models import MenuSelection
-from slack.tasks import send_reminder
+from slack.tasks import send_reminders
 
 LIMIT_HOUR = timezone.now().time().replace(hour=11, minute=0, second=0, microsecond=0)
 
@@ -20,7 +20,7 @@ class SendReminderView(LoginRequiredMixin, UserPassesTestMixin, View):
     def post(self, request, menu_id):
         scheme = request.scheme
         host = request.get_host()
-        send_reminder.delay(menu_id, scheme, host)
+        send_reminders(menu_id, scheme, host)
         return redirect('list_menus')
 
 

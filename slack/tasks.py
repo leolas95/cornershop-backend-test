@@ -1,15 +1,30 @@
+import os
 import urllib.parse
+from http import HTTPStatus
 
 import requests
 
 from cornershop_backend_test.celery import app
 from menus.models import MenuSelection
+from slack.constants import LIST_USERS_URL, SEND_REMINDER_URL
+
+SLACK_USER_TOKEN = os.getenv('SLACK_USER_TOKEN')
+
+
+class SlackRetryException(Exception):
+    def __init__(self, msg, retry_after):
+        super().__init__(msg)
+        self.msg = msg
+        self.retry_after = retry_after
+
+    def __reduce__(self):
+        return SlackRetryException, (self.msg, self.retry_after)
 
 
 def get_users():
     response = requests.get(
-        'https://slack.com/api/users.list',
-        headers={'Authorization': 'Bearer xoxb-1622044669637-1649020734528-peRCE5T2yrWla5O9K6xkbz7r'},
+        LIST_USERS_URL,
+        headers={'Authorization': f'Bearer {SLACK_USER_TOKEN}'},
     )
     members = response.json()['members']
 
@@ -23,14 +38,24 @@ def get_users():
     return ids
 
 
-@app.task
-def send_reminder(menu_id, scheme, host):
+@app.task(bind=True, rate_limit='3/s')
+def send_reminder(self, selection_url, user_id):
+    try:
+        response = requests.post(
+            SEND_REMINDER_URL,
+            headers={'Authorization': f'Bearer {SLACK_USER_TOKEN}'},
+            json={'text': f'Hello world! {selection_url}', 'time': 'now', 'user': user_id}
+        )
+        if response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
+            retry_after = response.headers['Retry-After']
+            raise SlackRetryException(f'Too many requests, retrying after {retry_after}', retry_after)
+    except SlackRetryException as exc:
+        self.retry(exc=exc, countdown=int(exc.retry_after))
+
+
+def send_reminders(menu_id, scheme, host):
     users = get_users()
     for user_id in users:
         selection = MenuSelection.objects.create(menu_id=menu_id, slack_user_id=user_id)
         selection_url = urllib.parse.urlunsplit((scheme, host, selection.get_absolute_url(), '', ''))
-        requests.post(
-            'https://slack.com/api/reminders.add',
-            headers={'Authorization': 'Bearer xoxp-1622044669637-1637762199217-1649177671232-3fa7fe1f4792d04468b6472ee4f76599'},
-            json={'text': f'Hello world! {selection_url}', 'time': 'now', 'user': user_id}
-        )
+        send_reminder.delay(selection_url, user_id)

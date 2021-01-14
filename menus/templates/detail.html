@@ -5,12 +5,14 @@
 {% block content %}
     {{ menu.date }}'s menu
 
-    <form action="{% url 'send_reminder' menu.id %}" method="post">
+    <form action="{% url 'menus:send_reminder' menu.id %}" method="post">
         {% csrf_token %}
         {% for option in menu.options.all %}
             <p>Option {{ forloop.counter }}: {{ option }}</p>
         {% endfor %}
 
         <button type="submit">Send reminder to all employees</button>
+
+        <a href="{% url 'menus:list_menus' %}">Back to menus listing</a>
     </form>
 {% endblock %}

@@ -42,7 +42,7 @@ class CreateMenuView(LoginRequiredMixin, UserPassesTestMixin, View):
                 options_to_create.append(Option(menu=menu, option=form.cleaned_data[option].capitalize()))
             Option.objects.bulk_create(options_to_create)
 
-            return redirect(reverse('detail_menu', kwargs={'pk': menu.id}))
+            return redirect(reverse('menus:detail_menu', kwargs={'pk': menu.id}))
 
         return render(request, 'create.html', {'form': form})
 

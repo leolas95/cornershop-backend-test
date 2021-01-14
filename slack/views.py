@@ -22,7 +22,7 @@ class SendReminderView(LoginRequiredMixin, UserPassesTestMixin, View):
         scheme = request.scheme
         host = request.get_host()
         send_reminders(menu_id, scheme, host)
-        return redirect('list_menus')
+        return redirect('menus:list_menus')
 
 
 class SelectMenuOptionView(View):

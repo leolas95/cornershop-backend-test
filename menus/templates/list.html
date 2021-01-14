@@ -6,7 +6,7 @@
     <h2>List of menus:</h2>
     <ul>
         {% for menu in menus %}
-            <li><a href="{% url 'detail_menu' menu.id %}">Menu for {{ menu.date }}</a></li>
+            <li><a href="{% url 'menus:detail_menu' menu.id %}">Menu for {{ menu.date }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}

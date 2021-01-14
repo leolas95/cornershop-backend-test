@@ -34,4 +34,4 @@ class MenuSelection(models.Model):
     option = models.OneToOneField(Option, on_delete=models.CASCADE, related_name='selection', null=True)
 
     def get_absolute_url(self):
-        return reverse('select_menu_option', kwargs={'selection_uuid': self.id})
+        return reverse('menus:select_menu_option', kwargs={'selection_uuid': self.id})

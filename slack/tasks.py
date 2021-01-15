@@ -49,7 +49,7 @@ def _send_reminder(self, selection_url: str, user_id: str):
         response = requests.post(
             SEND_REMINDER_URL,
             headers={'Authorization': f'Bearer {SLACK_USER_TOKEN}'},
-            json={'text': reminder_text, 'time': 'now', 'user': user_id}
+            json={'text': reminder_text, 'time': 'in 2 seconds', 'user': user_id}
         )
         if response.status_code == HTTPStatus.TOO_MANY_REQUESTS:
             retry_after = response.headers['Retry-After']

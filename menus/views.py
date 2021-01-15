@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import DetailView, ListView
 
 from menus.forms import CreateMenuForm
-from menus.models import Menu, Option
+from menus.models import Menu, Option, MenuSelection
 
 
 class CreateMenuView(LoginRequiredMixin, UserPassesTestMixin, View):
@@ -62,6 +62,16 @@ class ListMenuView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     login_url = 'users:login'
     context_object_name = 'menus'
     template_name = 'list.html'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class ListSelectionsView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = MenuSelection
+    login_url = 'users:login'
+    context_object_name = 'selections'
+    template_name = 'list_selections.html'
 
     def test_func(self):
         return self.request.user.is_staff

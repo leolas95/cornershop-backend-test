@@ -1,7 +1,6 @@
 import os
 import urllib.parse
 from http import HTTPStatus
-from typing import List
 
 import requests
 
@@ -22,22 +21,20 @@ class SlackRetryException(Exception):
         return SlackRetryException, (self.msg, self.retry_after)
 
 
-def get_members_ids() -> List[str]:
-    """Returns a list of the workspace members ids, except for bots."""
-
+def get_users_data():
+    """Returns a list of the workspace members data, ignoring bots."""
     response = requests.get(
         LIST_USERS_URL,
         headers={'Authorization': f'Bearer {SLACK_USER_TOKEN}'},
     )
-    members = response.json()['members']
 
-    ids = []
-    for member in members:
-        # Skip bots
-        if member['name'] == 'slackbot' or member['is_bot']:
-            continue
-        ids.append(member['id'])
-    return ids
+    if response.status_code == HTTPStatus.OK:
+        users = response.json()['members']
+
+        # Ignore bots
+        return filter(lambda user: user['name'] != 'slackbot' and not user['is_bot'], users)
+
+    return []
 
 
 def build_selection_url(scheme: str, host: str, selection: MenuSelection):
@@ -65,8 +62,13 @@ def _send_reminder(self, selection_url: str, user_id: str):
 def send_reminders(menu_id: str, scheme: str, host: str):
     """Send slack reminders to appropriate members of the workspace."""
 
-    users = get_members_ids()
-    for user_id in users:
-        selection = MenuSelection.objects.create(menu_id=menu_id, slack_user_id=user_id)
+    users = get_users_data()
+    for user in users:
+        selection = MenuSelection.objects.create(
+            menu_id=menu_id,
+            slack_user_id=user['id'],
+            slack_name=user['name'],
+            slack_display_name=user['profile']['display_name']
+        )
         selection_url = build_selection_url(scheme, host, selection)
-        _send_reminder.delay(selection_url, user_id)
+        _send_reminder.delay(selection_url, user['id'])

@@ -32,6 +32,8 @@ class MenuSelection(models.Model):
     slack_user_id = models.CharField(max_length=20)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
     option = models.OneToOneField(Option, on_delete=models.CASCADE, related_name='selection', null=True)
+    slack_name = models.CharField(max_length=50)
+    slack_display_name = models.CharField(max_length=50)
 
     def get_absolute_url(self):
         return reverse('menus:select_menu_option', kwargs={'selection_uuid': self.id})

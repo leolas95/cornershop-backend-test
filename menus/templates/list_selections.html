@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Menu selections
+{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for selection in selections %}
+            <li>
+                For {{ selection.menu.date }}'s menu, {{ selection.slack_display_name }} ({{ selection.slack_name }})
+                selected {{ selection.option|default_if_none:'Nothing yet!' }}
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

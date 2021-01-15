@@ -34,10 +34,10 @@ class SelectMenuOptionView(View):
 
     @staticmethod
     def post(request, selection_uuid):
-        # if timezone.now().time() > LIMIT_HOUR:
-        #     return HttpResponse(
-        #         f"Sorry but time's up! Limit time to pick an option is {LIMIT_HOUR} CLT!"
-        #     )
+        if timezone.now().time() > LIMIT_HOUR:
+            return HttpResponse(
+                f"Sorry but time's up! Limit time to pick an option is {LIMIT_HOUR} CLT!"
+            )
 
         selection = get_object_or_404(MenuSelection, id=selection_uuid)
         form = MenuForm(request.POST, instance=selection.menu)

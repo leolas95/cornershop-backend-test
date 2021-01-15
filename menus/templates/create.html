@@ -17,6 +17,9 @@ Create menu
 
 {% block scripts %}
     <script type="application/javascript">
+        $(document).ready(function() {
+            $('.datepicker').datepicker();
+        });
         const addOptionBtn = document.querySelector('#add-option-btn');
         const container = document.querySelector('#options-container');
 
@@ -46,5 +49,4 @@ Create menu
             counter++;
         });
     </script>
-
 {% endblock %}

@@ -4,7 +4,9 @@ from menus.models import Menu, Option
 
 
 class CreateMenuForm(forms.Form):
-    date = forms.DateField()
+    date = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'datepicker'})
+    )
 
     def __init__(self, *args, **kwargs):
         options = kwargs.pop('options', [])

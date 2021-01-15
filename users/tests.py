@@ -1,10 +1,10 @@
 from http import HTTPStatus
 
+from django.test import Client
 from django.test import TestCase
 from django.urls import reverse
 
 from users.models import Employee
-from django.test import Client
 
 
 class UserCreationTest(TestCase):
@@ -19,7 +19,7 @@ class UserCreationTest(TestCase):
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
-        templates = map(lambda t: t.name, response.templates)
+        templates = map(lambda template: template.name, response.templates)
         self.assertIn('signup.html', templates)
 
     def test_should_create_manager(self):
@@ -55,4 +55,3 @@ class UserCreationTest(TestCase):
 
         new_count = Employee.objects.filter(is_staff=False).count()
         self.assertEqual(new_count, old_count + 1)
-

@@ -1,6 +1,7 @@
 import os
 import urllib.parse
 from http import HTTPStatus
+from typing import Union, Iterator, Dict, List, Any
 
 import requests
 
@@ -21,14 +22,14 @@ class SlackRetryException(Exception):
         return SlackRetryException, (self.msg, self.retry_after)
 
 
-def get_users_data():
+def get_users_data() -> Union[Iterator[List[Dict[str, Any]]], List[Dict[str, Any]]]:
     """Returns a list of the workspace members data, ignoring bots."""
     response = requests.get(
         LIST_USERS_URL,
         headers={'Authorization': f'Bearer {SLACK_USER_TOKEN}'},
     )
 
-    if response.status_code == HTTPStatus.OK:
+    if response.ok:
         users = response.json()['members']
 
         # Ignore bots
@@ -42,7 +43,7 @@ def build_selection_url(scheme: str, host: str, selection: MenuSelection):
 
 
 @app.task(bind=True, rate_limit='3/s')
-def _send_reminder(self, selection_url: str, user_id: str):
+def send_reminder(self, selection_url: str, user_id: str):
     """Make request to send reminders to members."""
     try:
         reminder_text = f"Hi! This is the link to select today's menu: {selection_url}"
@@ -71,4 +72,4 @@ def send_reminders(menu_id: str, scheme: str, host: str):
             slack_display_name=user['profile']['display_name']
         )
         selection_url = build_selection_url(scheme, host, selection)
-        _send_reminder.delay(selection_url, user['id'])
+        send_reminder.delay(selection_url, user['id'])

@@ -6,4 +6,4 @@ The project consists of three main apps:
    and profile.
 2. The `menus` app contains the models, views and templates used for menu creation.
 3. The `slack` app contains the integration with the Slack API, allowing to send the menu of the day to the associated
-workspace's members. Currently, there's no way of associating slack users with system users beyond the registered names.
+workspace members. Currently, there's no way of associating slack users with system users beyond the registered names.
